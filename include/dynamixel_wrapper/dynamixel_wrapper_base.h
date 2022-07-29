@@ -12,6 +12,8 @@
 #include <string>
 #include <dynamixel_sdk/dynamixel_sdk.h>
 
+namespace dynamixel_wrapper{
+
 class dynamixel_wrapper_base{
     public:
     dynamixel_wrapper_base(const std::string& port_name, const int& baudrate, const float& protcol_version=2.0);
@@ -32,3 +34,5 @@ dynamixel_wrapper_base::dynamixel_wrapper_base(const std::string& port_name, con
         ROS_ERROR("Failed to set the baudrate!");
     }
 }
+
+}//namespace dynamixel_wrapper

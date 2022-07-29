@@ -12,25 +12,31 @@
 #include <string>
 #include <dynamixel_sdk/dynamixel_sdk.h>
 #include <dynamixel_wrapper/dynamixel_wrapper_base.h>
+#include <dynamixel_wrapper/dynamixel_wrapper_config.h>
+namespace dynamixel_wrapper{
 
 class dynamixel_wrapper{
     public:
-    dynamixel_wrapper(const int& id, dynamixel_wrapper_base& dxl_base);
+    dynamixel_wrapper(const int& id, dynamixel_wrapper_base& dxl_base, const dynamixel_wrapper_config& motor_config);
     void write(int address,int byte_size, int value);
     uint32_t read(int address,int byte_size);
+    void setPosition(double rad){write(motor_config_.goal_position,motor_config_.goal_position_size,rad);}
+    void setCurrentLimit(double current/*[mA]*/){write(motor_config_.current_limit,motor_config_.current_limit_size,current/motor_config_.current_scaling_factor);}
+
     private:
     int id_;
     dynamixel_wrapper_base* dxl_base_;
+    dynamixel_wrapper_config motor_config_;
 };
 
 
 
 
-dynamixel_wrapper::dynamixel_wrapper(const int& id, dynamixel_wrapper_base& dxl_base){
+dynamixel_wrapper::dynamixel_wrapper(const int& id, dynamixel_wrapper_base& dxl_base, const dynamixel_wrapper_config& motor_config){
     id_=id;
     dxl_base_= &dxl_base;
-
-
+    motor_config_=motor_config;
+    write(11,1,5);
     bool dxl_comm_result = dxl_base_->packetHandler->write1ByteTxRx(
     dxl_base_->portHandler, id_, 64, 1);
     if (dxl_comm_result != COMM_SUCCESS) {
@@ -79,3 +85,5 @@ uint32_t dynamixel_wrapper::read(int address,int byte_size){
     
     return value32;
 }
+
+}//namespace dynamixel_wrapper
