@@ -16,6 +16,8 @@ namespace dynamixel_wrapper{
 
 class dynamixel_wrapper_config{
     public:
+    int operating_mode;
+    int operating_mode_size;
     int torque_enable;
     int torque_enable_size;
     int current_limit;
@@ -32,6 +34,8 @@ class dynamixel_wrapper_config{
 
 dynamixel_wrapper_config XM430{
     //address,byte_size
+    //operating_mode
+    11,1,
     //torque
     64,1,
     //current_limit

@@ -36,7 +36,7 @@ int main(int argc, char **argv){
     int baudrate=1000000;
 
     dynamixel_wrapper::dynamixel_wrapper_base dxl_base(port_name,baudrate);
-    dynamixel_wrapper::dynamixel_wrapper motor1(1,dxl_base,dynamixel_wrapper::XM430);
+    dynamixel_wrapper::dynamixel_wrapper motor1(0,dxl_base,dynamixel_wrapper::XM430,60.0);
 
     ros::NodeHandle lSubscriber("");
 
@@ -44,12 +44,21 @@ int main(int argc, char **argv){
     
     ros::Subscriber joy_sub = lSubscriber.subscribe("/joy", 50, &joy_callback);
     joy_msg.axes.resize(20);
-
+    joy_msg.buttons.resize(20);
     while (n.ok())  {
-        motor1.setPosition(2000*(joy_msg.axes[0]+1));
-        motor1.setCurrentLimit(10);
-        motor1.write(11,1,0);
-        ROS_INFO("%d",motor1.read(11,1));
+        motor1.setGoalPosition(180.0*(joy_msg.axes[0]+1));
+        //motor1.write(11,1,0);
+        ROS_INFO("current:%lf Position:%lf",motor1.getCurrentLimit(),motor1.getGoalPosition());
+        if(joy_msg.buttons[0]){
+            motor1.write(64,1,0);
+            //motor1.setCurrentLimit(15.0);
+        }
+        if(joy_msg.buttons[1]){
+            motor1.write(64,1,1);
+            //motor1.setCurrentLimit(30.0);
+        }
+        
+        //ROS_INFO("current:%d",motor1.read(64,1));
         ros::spinOnce();//subsucriberの割り込み関数はこの段階で実装される
         loop_rate.sleep();
         
