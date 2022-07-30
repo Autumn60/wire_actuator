@@ -23,7 +23,7 @@ class dynamixel_wrapper{
     uint32_t read(int address,int byte_size);
 
     void setGoalPosition(double deg){write(motor_config_.goal_position,motor_config_.goal_position_size,deg*4096.0/360.0);}
-    double getGoalPosition(){return read(motor_config_.goal_position,motor_config_.goal_position_size)*360/4096.0;}
+    double getGoalPosition(){return int(read(motor_config_.goal_position,motor_config_.goal_position_size))*360/4096.0;}
 
     //if toqque ebable, no working
     void setCurrentLimit(double current/*[mA]*/){write(motor_config_.current_limit,motor_config_.current_limit_size,int(current/motor_config_.current_scaling_factor));}
@@ -34,6 +34,9 @@ class dynamixel_wrapper{
 
     void setOperatingMode(int mode){write(motor_config_.operating_mode,motor_config_.operating_mode_size,mode);}
     int getOperatingMode(){return read(motor_config_.operating_mode,motor_config_.operating_mode_size);}
+
+    double getCurrentPosition(){return int(read(motor_config_.current_position,motor_config_.current_position_size))*360/4096.0;}
+
     private:
     int id_;
     dynamixel_wrapper_base* dxl_base_;

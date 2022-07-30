@@ -26,8 +26,9 @@ int main(int argc, char **argv){
     
     ros::init(argc, argv, "manual_control_node");
     ros::NodeHandle n;
+    double rate=10.0;
     //制御周期10Hz
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(rate);
 
     //param setting
     ros::NodeHandle pn("~");
@@ -36,26 +37,57 @@ int main(int argc, char **argv){
     int baudrate=1000000;
 
     dynamixel_wrapper::dynamixel_wrapper_base dxl_base(port_name,baudrate);
-    dynamixel_wrapper::dynamixel_wrapper motor1(0,dxl_base,dynamixel_wrapper::XM430,60.0);
+    dynamixel_wrapper::dynamixel_wrapper motor0(0,dxl_base,dynamixel_wrapper::XM430,50.0);
+    dynamixel_wrapper::dynamixel_wrapper motor1(1,dxl_base,dynamixel_wrapper::XM430,50.0);
+    dynamixel_wrapper::dynamixel_wrapper motor2(2,dxl_base,dynamixel_wrapper::XM430,100.0);
+    dynamixel_wrapper::dynamixel_wrapper motor3(3,dxl_base,dynamixel_wrapper::XM430,120.0);
 
     ros::NodeHandle lSubscriber("");
-
-    //Path subscliber
-    
     ros::Subscriber joy_sub = lSubscriber.subscribe("/joy", 50, &joy_callback);
     joy_msg.axes.resize(20);
     joy_msg.buttons.resize(20);
+
+    motor0.setTorqueEnable(false);
+    motor2.setTorqueEnable(false);
+    motor3.setTorqueEnable(false);
+    motor1.setTorqueEnable(false);
+
+    std::vector<double> offset_angle={295.585938, 101.451172, 272.285156, 51.416016};
+
     while (n.ok())  {
-        motor1.setGoalPosition(180.0*(joy_msg.axes[0]+1));
+        motor3.setGoalPosition(200.0*(joy_msg.axes[0])+offset_angle[3]);
         //motor1.write(11,1,0);
-        ROS_INFO("current:%lf Position:%lf",motor1.getCurrentLimit(),motor1.getGoalPosition());
-        if(joy_msg.buttons[0]){
-            motor1.write(64,1,0);
-            //motor1.setCurrentLimit(15.0);
-        }
+        ROS_INFO("Positions:{%lf, %lf, %lf, %lf}",motor0.getCurrentPosition(),motor1.getCurrentPosition(),motor2.getCurrentPosition(),motor3.getCurrentPosition());
+
+        //circle
         if(joy_msg.buttons[1]){
-            motor1.write(64,1,1);
-            //motor1.setCurrentLimit(30.0);
+            motor0.setTorqueEnable(true);
+            motor1.setTorqueEnable(true);
+            motor2.setTorqueEnable(true);
+            motor3.setTorqueEnable(true);
+        }
+        //closs
+        if(joy_msg.buttons[0]){
+            motor0.setTorqueEnable(false);
+            motor1.setTorqueEnable(false);
+            motor2.setTorqueEnable(false);
+            motor3.setTorqueEnable(false);
+        }
+
+        const double duration=1/rate;
+        const double amplitude=90.0;
+        const double hz=1.0;
+        static double current_angle=0.0;
+        if(joy_msg.buttons[2]){
+            current_angle+=hz*duration*2.0*M_PI;
+            motor0.setGoalPosition(-offset_angle[0]+amplitude+amplitude*sin(current_angle));
+            motor1.setGoalPosition(offset_angle[1]+amplitude+amplitude*sin(current_angle+2.0/3.0*M_PI));
+            motor2.setGoalPosition(-offset_angle[2]+amplitude+amplitude*sin(current_angle+4.0/3.0*M_PI));
+        }
+        if(false){
+            motor0.setGoalPosition(offset_angle[0]+amplitude+amplitude*sin(current_angle));
+            motor1.setGoalPosition(offset_angle[1]+amplitude+amplitude*sin(current_angle+2.0/3.0*M_PI));
+            motor2.setGoalPosition(offset_angle[2]+amplitude+amplitude*sin(current_angle+4.0/3.0*M_PI));
         }
         
         //ROS_INFO("current:%d",motor1.read(64,1));

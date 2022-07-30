@@ -29,6 +29,8 @@ class dynamixel_wrapper_config{
     int goal_velocity_size;
     int goal_current;
     int goal_current_size;
+    int current_position;
+    int current_position_size;
     
 };
 
@@ -45,7 +47,9 @@ dynamixel_wrapper_config XM430{
     //goal velocity
     104,4,
     //goal_current
-    102,2
+    102,2,
+    //currrent_position
+    132,4
 
 };
 
