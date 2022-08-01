@@ -2,7 +2,10 @@
   <node name="joy_node" pkg="joy" type="joy_node" >
     <param name="dev" value="/dev/input/js1" />
   </node>
+
   <node name="manual_control" pkg="wire_actuator" type="manual_control" output="screen">
     
   </node>
+  <arg name="rviz_file" default="$(find wire_actuator)/config/rviz/manual_control.rviz" />
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_file)" respawn="true" />
 </launch>

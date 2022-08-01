@@ -31,7 +31,8 @@ class dynamixel_wrapper_config{
     int goal_current_size;
     int current_position;
     int current_position_size;
-    
+    int current_current;
+    int current_current_size;    
 };
 
 dynamixel_wrapper_config XM430{
@@ -49,7 +50,9 @@ dynamixel_wrapper_config XM430{
     //goal_current
     102,2,
     //currrent_position
-    132,4
+    132,4,
+    //current current
+    126,2
 
 };
 
