@@ -118,23 +118,18 @@ int main(int argc, char **argv){
             motor3.setGoalPosition(offset_angle[3]);
         }
 
-        /*
+        
         const double duration=1/rate;
-        const double amplitude=90.0;
-        const double hz=1.0;
+        const double amplitude=70.0;
+        const double hz=0.5;
         static double current_angle=0.0;
         if(joy_msg.buttons[2]){
             current_angle+=hz*duration*2.0*M_PI;
-            motor0.setGoalPosition(-offset_angle[0]+amplitude+amplitude*sin(current_angle));
+            motor0.setGoalPosition(offset_angle[0]-amplitude+amplitude*sin(current_angle));
             motor1.setGoalPosition(offset_angle[1]+amplitude+amplitude*sin(current_angle+2.0/3.0*M_PI));
-            motor2.setGoalPosition(-offset_angle[2]+amplitude+amplitude*sin(current_angle+4.0/3.0*M_PI));
+            motor2.setGoalPosition(offset_angle[2]-amplitude+amplitude*sin(current_angle+4.0/3.0*M_PI));
+            motor3.setGoalPosition(max_angle[3]);
         }
-        if(false){
-            motor0.setGoalPosition(offset_angle[0]+amplitude+amplitude*sin(current_angle));
-            motor1.setGoalPosition(offset_angle[1]+amplitude+amplitude*sin(current_angle+2.0/3.0*M_PI));
-            motor2.setGoalPosition(offset_angle[2]+amplitude+amplitude*sin(current_angle+4.0/3.0*M_PI));
-        }
-        */
 
         std::vector<std_msgs::Float32> pos_msg(4);
         pos_msg[0].data=motor0.getCurrentPosition()-offset_angle[0];
