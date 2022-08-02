@@ -117,6 +117,7 @@ int32_t dynamixel_wrapper::read_signed(int address,int byte_size){
     else if(byte_size==2){
         dxl_base_->packetHandler->read2ByteTxRx(dxl_base_->portHandler, id_, address, &value16);
         result=value16;
+        result=result>INT16_MAX?(result-UINT16_MAX):result;
     }
     else if(byte_size==4){
         dxl_base_->packetHandler->read4ByteTxRx(dxl_base_->portHandler, id_, address, &value32);
