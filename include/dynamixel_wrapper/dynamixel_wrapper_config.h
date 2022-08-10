@@ -25,6 +25,7 @@ class dynamixel_wrapper_config{
     double current_scaling_factor;
     int goal_position;
     int goal_position_size;
+    int goal_position_resolution;
     int goal_velocity;
     int goal_velocity_size;
     int goal_current;
@@ -32,7 +33,7 @@ class dynamixel_wrapper_config{
     int current_position;
     int current_position_size;
     int current_current;
-    int current_current_size;    
+    int current_current_size;
 };
 
 dynamixel_wrapper_config XM430{
@@ -44,7 +45,7 @@ dynamixel_wrapper_config XM430{
     //current_limit
     38,2,2.69,
     //goal position
-    116,4,
+    116,4,4096,
     //goal velocity
     104,4,
     //goal_current
@@ -53,6 +54,27 @@ dynamixel_wrapper_config XM430{
     132,4,
     //current current
     126,2
+
+};
+
+dynamixel_wrapper_config PH54{
+    //address,byte_size
+    //operating_mode
+    11,1,
+    //torque
+    512,1,
+    //current_limit
+    38,2,1.0,
+    //goal position
+    564,4,1003846,
+    //goal velocity
+    552,4,
+    //goal_current
+    550,2,
+    //currrent_position
+    580,4,
+    //current current
+    574,2
 
 };
 

@@ -36,7 +36,7 @@ class dynamixel_wrapper{
     void setOperatingMode(int mode){write(motor_config_.operating_mode,motor_config_.operating_mode_size,mode);}
     int getOperatingMode(){return read(motor_config_.operating_mode,motor_config_.operating_mode_size);}
 
-    double getCurrentPosition(){return int(read(motor_config_.current_position,motor_config_.current_position_size))*360/4096.0;}
+    double getCurrentPosition(){return int(read(motor_config_.current_position,motor_config_.current_position_size))*360/(double)motor_config_.goal_position_resolution;}
 
     double getCurrentCurrent(){return int(read_signed(motor_config_.current_current,motor_config_.current_current_size))*motor_config_.current_scaling_factor;}
 
